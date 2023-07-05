@@ -16,7 +16,7 @@ export function Model(props) {
     },
   });
   return (
-    <group position={[0, 17, 5]} {...props} scale={12} dispose={null}>
+    <group position={[0, 15, 5]} {...props} scale={12} dispose={null}>
       <mesh
         geometry={nodes.StaticMeshActor_0_StaticMeshComponent0.geometry}
         material={materials.Rug_007_material}
