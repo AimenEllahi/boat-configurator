@@ -7,7 +7,12 @@ import {
   useLoader,
   useFrame,
 } from "@react-three/fiber";
-import { Environment, OrbitControls, Sky } from "@react-three/drei";
+import {
+  Environment,
+  OrbitControls,
+  PresentationControls,
+  Sky,
+} from "@react-three/drei";
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { useControls } from "leva";
 import { Model } from "./Components/Boat";
@@ -89,13 +94,15 @@ export default function App() {
         <pointLight position={[100, 100, 100]} />
         <pointLight position={[-100, -100, -100]} />
         <Environment preset='sunset' />
-        <Suspense fallback={null}>
-          <Ocean />
-          <Model />
-        </Suspense>
-        <SkyBox />
+        <PresentationControls enabled={false}>
+          <Suspense fallback={null}>
+            <Ocean />
+            <Model />
+          </Suspense>
+          <SkyBox />
+        </PresentationControls>
 
-        <OrbitControls maxPolarAngle={Math.PI * 0.495} />
+        {/* <OrbitControls maxPolarAngle={Math.PI * 0.495} /> */}
       </Canvas>
     </div>
   );
