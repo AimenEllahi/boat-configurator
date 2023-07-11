@@ -19,7 +19,8 @@
     "react-icons": "^4.10.1",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
-    "three": "^0.154.0"
+    "three": "^0.154.0",
+    "zustand": "^4.3.9"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

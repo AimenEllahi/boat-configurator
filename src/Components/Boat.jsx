@@ -209,6 +209,8 @@ export function Model(props) {
         <mesh
           geometry={nodes["Z-Misc_18"].geometry}
           material={materials.Metal}
+          material-metalness={0.8}
+          name="lowerTubes"
         />
         <mesh
           geometry={nodes["Z-Misc_19"].geometry}
