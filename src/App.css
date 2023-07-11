@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,30 @@
 
 .read-the-docs {
   color: #888;
+} */
+
+.icon-container {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  display: flex;
+  width: 150px;
+  justify-content: space-between;
+}
+
+.icon {
+  margin-left: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(245, 245, 220, 0.699);
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.icon:hover {
+  cursor: pointer;
+}
+
+.icon img {
+  width: 100%;
 }

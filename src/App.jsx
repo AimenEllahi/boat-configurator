@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import React, { Suspense, useRef, useMemo } from "react";
+import React, { Suspense, useRef, useMemo, useState } from "react";
 import {
   Canvas,
   extend,
@@ -16,6 +16,8 @@ import {
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { useControls } from "leva";
 import { Model } from "./Components/Boat";
+import ColorContainer from "./Components/ColorContainer";
+import "./App.css";
 
 extend({ Water });
 
@@ -88,6 +90,12 @@ const SkyBox = () => {
 };
 
 export default function App() {
+  const [showColorContainer, setShowColorContainer] = useState(false);
+
+  const handleColorClick = () => {
+    setShowColorContainer((prevShow) => !prevShow);
+  };
+
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
       <Canvas camera={{ position: [0, 5, 100], fov: 55, near: 1, far: 20000 }}>
@@ -104,6 +112,15 @@ export default function App() {
 
         {/* <OrbitControls maxPolarAngle={Math.PI * 0.495} /> */}
       </Canvas>
+      <div className="icon-container">
+        <div className="icon">
+          <img onClick={handleColorClick} src="/color.png" alt="arrow" />
+        </div>
+        <div className="icon">
+          <img src="/sun_icon.png" alt="arrow" />
+        </div>    
+      </div>
+      {showColorContainer && <ColorContainer />}
     </div>
   );
 }
