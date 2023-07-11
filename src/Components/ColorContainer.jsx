@@ -65,12 +65,22 @@ function ColorContainer() {
         <div className='colors-div' >
             <div className='color-inner-div'>
                 {colorOptions.map((color, index) => (
-                    <div key={index} className='color-box' style={{
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                    }}>
+                        <div key={index} className='color-box' style={{
                         backgroundColor: color,
                         height: "45px",
-                        width: "100%",
+                        width: "100px",
                         borderRadius: "5px",
                     }}>
+                    </div>
+                    <span style={{
+                        fontSize: "16px",
+                        fontWeight: "550",
+                    }}>{color}</span>
                     </div>
                 ))}
             </div>

@@ -1,7 +1,7 @@
 .color-container{
     width: 250px;
     height: 400px;
-    background-color: rgba(255, 255, 255, 0.74);
+    background-color: rgb(255, 255, 255);
     position: absolute;
     top: 50px;
     right: 50px;
@@ -10,7 +10,7 @@
 
 .slider{
     margin: auto;
-    width: 80%;
+    width: 100%;
     padding-top: 10px;
 }
 
@@ -33,16 +33,16 @@
     align-items: center;
     height: 350px;
     overflow-y: scroll;
-    /* border: 1px solid black; */
+    border-top: 1px solid rgba(216, 210, 210, 0.767);
 }
 
 .color-inner-div{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: left;
     margin: 10px;
     /* border: 2px solid black; */
-    width: 100px;
+    width: 170px;
     height: 110%;
 }
