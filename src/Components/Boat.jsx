@@ -8,12 +8,16 @@ import { useGLTF } from "@react-three/drei";
 import { useControls } from "leva";
 import gsap from "gsap";
 import { useThree } from "@react-three/fiber";
+import useColorStore from "../Utils/store";
 
 export function Model(props) {
   const { nodes, materials } = useGLTF("/Models/boat-transformed.glb");
+  const colors = useColorStore((state) => state.colors);
   const { camera } = useThree();
   const nodesRef = [useRef(), useRef(), useRef()];
   const [activeState, setActiveState] = useState(0);
+
+  console.log("Here", colors);
   const { position, rotation } = useControls("Position", {
     position: {
       value: [0, 5, 100],
@@ -210,7 +214,7 @@ export function Model(props) {
           geometry={nodes["Z-Misc_18"].geometry}
           material={materials.Metal}
           material-metalness={0.8}
-          name="lowerTubes"
+          name='lowerTubes'
         />
         <mesh
           geometry={nodes["Z-Misc_19"].geometry}
