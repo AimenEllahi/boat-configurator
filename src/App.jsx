@@ -26,7 +26,7 @@ function Ocean() {
   const gl = useThree((state) => state.gl);
   const waterNormals = useLoader(THREE.TextureLoader, "/waternormals.jpg");
   waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
-  const geom = useMemo(() => new THREE.PlaneGeometry(10000, 10000), []);
+  const geom = useMemo(() => new THREE.PlaneGeometry(1000, 1000), []);
   const config = useMemo(
     () => ({
       textureWidth: 512,
@@ -102,23 +102,21 @@ export default function App() {
         <pointLight position={[100, 100, 100]} />
         <pointLight position={[-100, -100, -100]} />
         <Environment preset='sunset' />
-        <PresentationControls enabled={false}>
-          <Suspense fallback={null}>
-            <Ocean />
-            <Model />
-          </Suspense>
-          <SkyBox />
-        </PresentationControls>
+        <Ocean />
+        <Suspense fallback={null}>
+          <Model />
+        </Suspense>
+        <SkyBox />
 
-        {/* <OrbitControls maxPolarAngle={Math.PI * 0.495} /> */}
+        <OrbitControls maxPolarAngle={Math.PI * 0.495} />
       </Canvas>
-      <div className="icon-container">
-        <div className="icon">
-          <img onClick={handleColorClick} src="/color.png" alt="arrow" />
+      <div className='icon-container'>
+        <div className='icon'>
+          <img onClick={handleColorClick} src='/color.png' alt='arrow' />
         </div>
-        <div className="icon">
-          <img src="/sun_icon.png" alt="arrow" />
-        </div>    
+        <div className='icon'>
+          <img src='/sun_icon.png' alt='arrow' />
+        </div>
       </div>
       {/*download pdf button*/}
       <div className="download-pdf" style={{ backgroundColor: "gray", position: "fixed", bottom: "50px", left: "50px" }}>

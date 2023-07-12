@@ -1,20 +1,19 @@
 import { create } from "zustand";
-import { colors } from "../Constants/data";
 
 const useColorStore = create((set) => ({
   colors: {
-    rim: colors[Math.floor(colors.length / 2)],
-    frame: colors[Math.floor(colors.length / 2)],
+    "Primary Fence": "white",
+    "Secondary Fence": "white",
+    "Flooring Option": "white",
+    "Primary Interior Vinyl": "white",
+    "Secondary Interior Vinyl": "white",
+    "Console Color": "white",
   },
-  changeColor: (color) =>
+  setColor: (color) =>
     set((state) => ({
-      colors: {
-        ...state.colors,
-        [state.selectedPart]: color,
-      },
+      ...state.colors,
+      [color.part]: color.hex,
     })),
-  selectedPart: "rim",
-  changePart: (part) => set(() => ({ selectedPart: part })),
 }));
 
 export default useColorStore;
