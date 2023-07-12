@@ -120,6 +120,11 @@ export default function App() {
           <img src="/sun_icon.png" alt="arrow" />
         </div>    
       </div>
+      {/*download pdf button*/}
+      <div className="download-pdf" style={{ backgroundColor: "gray", position: "fixed", bottom: "50px", left: "50px" }}>
+      <button className="button-pdf">Download PDF</button>
+      </div>
+    
       {showColorContainer && <ColorContainer />}
     </div>
   );
