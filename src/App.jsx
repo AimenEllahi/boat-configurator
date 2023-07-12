@@ -13,6 +13,7 @@ import {
   PresentationControls,
   Sky,
 } from "@react-three/drei";
+import {BsFillEyeFill} from "react-icons/bs";
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { useControls } from "leva";
 import { Model } from "./Components/Boat";
@@ -111,6 +112,9 @@ export default function App() {
         <OrbitControls maxPolarAngle={Math.PI * 0.495} />
       </Canvas>
       <div className='icon-container'>
+        <div className="icon">
+          <BsFillEyeFill size={22} style={{padding:"3px"}} />
+        </div>
         <div className='icon'>
           <img onClick={handleColorClick} src='/color.png' alt='arrow' />
         </div>
