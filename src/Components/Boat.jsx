@@ -14,7 +14,7 @@ export function Model(props) {
   const { nodes, materials } = useGLTF("/Models/boat-transformed.glb");
   const colors = useColorStore((state) => state.colors);
   const { camera } = useThree();
-  const nodesRef = [useRef(), useRef(), useRef()];
+  const nodesRef = [useRef(), useRef(), useRef(), useRef(), useRef()];
   const [activeState, setActiveState] = useState(0);
 
   console.log("Here", colors);
@@ -28,6 +28,7 @@ export function Model(props) {
       step: 0.1,
     },
   });
+  //body, seats, fence, bottom
   //body-paint
   useEffect(() => {
     switch (activeState) {
@@ -65,6 +66,23 @@ export function Model(props) {
           y: 33,
           z: 21.4,
           duration: 2,
+          onStart: () => {
+            gsap.to(camera.rotation, {
+              x: -0.9,
+              y: 0.9,
+              z: 0.8,
+              duration: 2,
+            });
+          },
+        });
+        break;
+      case 3:
+        gsap.to(camera.position, {
+          x: -40,
+          y: 8,
+          z: 50,
+          duration: 2,
+          ease: "power.easeOut",
           onStart: () => {
             gsap.to(camera.rotation, {
               x: -0.9,
@@ -215,6 +233,8 @@ export function Model(props) {
           material={materials.Metal}
           material-metalness={0.8}
           name='lowerTubes'
+          ref={nodesRef[2]}
+          onClick={() => setActiveState(3)}
         />
         <mesh
           geometry={nodes["Z-Misc_19"].geometry}
