@@ -13,7 +13,7 @@ import {
   PresentationControls,
   Sky,
 } from "@react-three/drei";
-import {BsFillEyeFill} from "react-icons/bs";
+import { BsFillEyeFill } from "react-icons/bs";
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { useControls } from "leva";
 import { Model } from "./Components/Boat";
@@ -56,7 +56,7 @@ const SkyBox = () => {
     azimuth: 180,
   };
   const sun = new THREE.Vector3();
-  console.log(sunRef, scene);
+  // console.log(sunRef, scene);
   const pmremGenerator = new THREE.PMREMGenerator(gl);
   let renderTarget;
   // function updateSun() {
@@ -92,6 +92,7 @@ const SkyBox = () => {
 
 export default function App() {
   const [showColorContainer, setShowColorContainer] = useState(false);
+  const [isAnimationTriggered, setIsAnimationTriggered] = useState(false);
 
   const handleColorClick = () => {
     setShowColorContainer((prevShow) => !prevShow);
@@ -105,15 +106,18 @@ export default function App() {
         <Environment preset='sunset' />
         <Ocean />
         <Suspense fallback={null}>
-          <Model />
+          <Model setIsAnimationTriggered={setIsAnimationTriggered} />
         </Suspense>
         <SkyBox />
 
-        <OrbitControls maxPolarAngle={Math.PI * 0.495} />
+        <OrbitControls
+          enabled={!isAnimationTriggered}
+          maxPolarAngle={Math.PI * 0.495}
+        />
       </Canvas>
       <div className='icon-container'>
-        <div className="icon">
-          <BsFillEyeFill size={22} style={{padding:"3px"}} />
+        <div className='icon'>
+          <BsFillEyeFill size={22} style={{ padding: "3px" }} />
         </div>
         <div className='icon'>
           <img onClick={handleColorClick} src='/color.png' alt='arrow' />
@@ -123,11 +127,19 @@ export default function App() {
         </div>
       </div>
       {/*download pdf button*/}
-      <div className="download-pdf" style={{ backgroundColor: "gray", position: "fixed", bottom: "50px", left: "50px" }}>
-      <button className="button-pdf">Download PDF</button>
+      <div
+        className='download-pdf'
+        style={{
+          backgroundColor: "gray",
+          position: "fixed",
+          bottom: "50px",
+          left: "50px",
+        }}
+      >
+        <button className='button-pdf'>Download PDF</button>
       </div>
-    
-      {showColorContainer && <ColorContainer />}
+
+      {showColorContainer && <ColorContainer show={showColorContainer} />}
     </div>
   );
 }

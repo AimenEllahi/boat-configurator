@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -104,10 +104,10 @@ const colorOptions = {
   ],
 };
 
-function ColorContainer() {
+function ColorContainer({ show }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const sliderRef = useRef(null);
-  const setColor = useColorStore((state) => state.setColor);
+  const { setColors, colors, setActiveState } = useColorStore();
 
   const handlePrev = () => {
     sliderRef.current.slickPrev();
@@ -116,6 +116,10 @@ function ColorContainer() {
   const handleNext = () => {
     sliderRef.current.slickNext();
   };
+
+  useEffect(() => {
+    if (show) setActiveState(modelParts[activeIndex]);
+  }, [activeIndex]);
 
   return (
     <div className='color-container'>
@@ -159,7 +163,7 @@ function ColorContainer() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginTop: "5px",
+                  margin: "5px 0",
                 }}
               >
                 <div
@@ -171,9 +175,12 @@ function ColorContainer() {
                     borderRadius: "5px",
                     cursor: "pointer",
                   }}
-                  onClick={() => {
-                    setColor({ part: modelParts[activeIndex], hex: item.hex });
-                  }}
+                  onClick={() =>
+                    setColors(
+                      { part: modelParts[activeIndex], hex: item.hex },
+                      colors
+                    )
+                  }
                 ></div>
                 <span
                   style={{

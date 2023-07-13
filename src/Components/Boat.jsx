@@ -12,12 +12,15 @@ import useColorStore from "../Utils/store";
 
 export function Model(props) {
   const { nodes, materials } = useGLTF("/Models/boat-transformed.glb");
-  const colors = useColorStore((state) => state.colors);
+  const { colors, activeState, setActiveState } = useColorStore();
   const { camera } = useThree();
-  const nodesRef = [useRef(), useRef(), useRef(), useRef(), useRef()];
-  const [activeState, setActiveState] = useState(0);
+  const floorRef = useRef();
+  const primFencRef = useRef();
+  const secFencRef = useRef();
+  const primIntRef = useRef();
+  const secIntRef = useRef();
+  const consoleRef = useRef();
 
-  console.log("Here", colors);
   const { position, rotation } = useControls("Position", {
     position: {
       value: [0, 5, 100],
@@ -28,17 +31,23 @@ export function Model(props) {
       step: 0.1,
     },
   });
-  //body, seats, fence, bottom
-  //body-paint
+
   useEffect(() => {
+    console.log(activeState);
     switch (activeState) {
       case 0:
+        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 0,
           y: 5,
           z: 100,
           duration: 2,
           ease: "power.easeOut",
+          onComplete: () => {
+            setTimeout(() => {
+              props.setIsAnimationTriggered(false);
+            }, 100);
+          },
           onStart: () => {
             gsap.to(camera.rotation, {
               x: 0,
@@ -48,48 +57,112 @@ export function Model(props) {
           },
         });
         break;
-      case 1:
+      case "Secondary Fence":
+        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 0,
           y: 16.5,
           z: 62.5,
           duration: 1,
           ease: "power.easeOut",
-          onStart: () => {
-            camera.lookAt(...nodesRef[0].current.position);
+          onComplete: () => {
+            setTimeout(() => {
+              props.setIsAnimationTriggered(false);
+            }, 500);
+          },
+          onUpdate: () => {
+            camera.lookAt(...secFencRef.current.position);
           },
         });
         break;
-      case 2:
+      case "Primary Interior Vinyl":
+        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 62,
           y: 33,
           z: 21.4,
           duration: 2,
-          onStart: () => {
-            gsap.to(camera.rotation, {
-              x: -0.9,
-              y: 0.9,
-              z: 0.8,
-              duration: 2,
-            });
+          onComplete: () => {
+            setTimeout(() => {
+              props.setIsAnimationTriggered(false);
+            }, 500);
+          },
+          onUpdate: () => {
+            camera.lookAt(...primIntRef.current.position);
           },
         });
         break;
-      case 3:
+      case "Primary Fence":
+        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: -40,
           y: 8,
           z: 50,
           duration: 2,
           ease: "power.easeOut",
-          onStart: () => {
-            gsap.to(camera.rotation, {
-              x: -0.9,
-              y: 0.9,
-              z: 0.8,
-              duration: 2,
-            });
+          onComplete: () => {
+            setTimeout(() => {
+              props.setIsAnimationTriggered(false);
+            }, 500);
+          },
+          onUpdate: () => {
+            camera.lookAt(...primFencRef.current.position);
+          },
+        });
+        break;
+      case "Secondary Interior Vinyl":
+        props.setIsAnimationTriggered(true);
+
+        gsap.to(camera.position, {
+          x: 27.8,
+          y: 38,
+          z: 13,
+          duration: 2,
+          ease: "power.easeOut",
+          onComplete: () => {
+            setTimeout(() => {
+              props.setIsAnimationTriggered(false);
+            }, 500);
+          },
+          onUpdate: () => {
+            camera.lookAt(...secIntRef.current.position);
+          },
+        });
+        break;
+      case "Flooring Option":
+        props.setIsAnimationTriggered(true);
+        gsap.to(camera.position, {
+          x: 20,
+          y: 40,
+          z: 40,
+          duration: 2,
+          ease: "power.easeOut",
+          onComplete: () => {
+            setTimeout(() => {
+              props.setIsAnimationTriggered(false);
+            }, 500);
+          },
+          onUpdate: () => {
+            camera.lookAt(...floorRef.current.position);
+          },
+          onStart: () => {},
+        });
+        break;
+      case "Console Color":
+        props.setIsAnimationTriggered(true);
+        gsap.to(camera.position, {
+          x: 19,
+          y: 40.5,
+          z: 33,
+          duration: 2,
+          ease: "power.easeOut",
+          onComplete: () => {
+            setTimeout(() => {
+              props.setIsAnimationTriggered(false);
+            }, 500);
+          },
+          onUpdate: () => {
+            camera.lookAt(...consoleRef.current.position);
           },
         });
         break;
@@ -103,35 +176,49 @@ export function Model(props) {
     camera.rotation.set(...rotation);
   }, [rotation, position]);
   return (
-    <group position={[0, 15, 5]} {...props} scale={12} dispose={null}>
+    <group
+      onPointerMissed={() => setActiveState(0)}
+      position={[0, 15, 5]}
+      {...props}
+      scale={12}
+      dispose={null}
+    >
       <mesh
         geometry={nodes.StaticMeshActor_0_StaticMeshComponent0.geometry}
         material={materials.Rug_007_material}
+        name='flooring'
+        ref={floorRef}
         position={[0.392, -0.833, 0]}
+        onClick={() => setActiveState("Flooring Option")}
+        material-color={colors["Flooring Option"]}
       />
       <mesh
         geometry={nodes.StaticMeshActor_1_StaticMeshComponent0.geometry}
         material={materials.Plastic_Metallic_white__0}
+        name='console'
+        ref={consoleRef}
         position={[1.395, -0.336, 0]}
+        onClick={() => setActiveState("Console Color")}
+        material-color={colors["Console Color"]}
       />
       <mesh
         geometry={nodes.StaticMeshActor_2_StaticMeshComponent0.geometry}
         material={materials.Body_paint_blue}
         position={[0.138, -0.77, 0]}
-        //material-color={"#ff0000"}
-        name='body-paint'
-        ref={nodesRef[0]}
-        onClick={() => setActiveState(1)}
+        name='Secondary Fence'
+        ref={secFencRef}
+        onClick={() => setActiveState("Secondary Fence")}
+        material-color={colors["Secondary Fence"]}
       />
       <mesh
         geometry={nodes.StaticMeshActor_3_StaticMeshComponent0.geometry}
         material={materials.Leather_white_16_50cm__0}
         position={[0.519, -0.127, 0]}
         rotation={[0, 0, 0.08]}
-        material-color={"#ff0000"}
-        name='seats'
-        ref={nodesRef[1]}
-        onClick={() => setActiveState(2)}
+        material-color={colors["Primary Interior Vinyl"]}
+        name='Primary Interior'
+        ref={primIntRef}
+        onClick={() => setActiveState("Primary Interior Vinyl")}
       />
       <group
         position={[0.124, -0.494, 1.114]}
@@ -141,6 +228,10 @@ export function Model(props) {
         <mesh
           geometry={nodes.Secondary_Interior.geometry}
           material={materials.Leather_grey}
+          material-color={colors["Secondary Interior Vinyl"]}
+          name='Secondary Interior'
+          ref={secIntRef}
+          onClick={() => setActiveState("Secondary Interior Vinyl")}
         />
         <mesh
           geometry={nodes.Secondary_Interior_1.geometry}
@@ -232,9 +323,10 @@ export function Model(props) {
           geometry={nodes["Z-Misc_18"].geometry}
           material={materials.Metal}
           material-metalness={0.8}
-          name='lowerTubes'
-          ref={nodesRef[2]}
-          onClick={() => setActiveState(3)}
+          material-color={colors["Primary Fence"]}
+          name='Primary Fence'
+          ref={primFencRef}
+          onClick={() => setActiveState("Primary Fence")}
         />
         <mesh
           geometry={nodes["Z-Misc_19"].geometry}
