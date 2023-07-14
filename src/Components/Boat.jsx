@@ -21,22 +21,9 @@ export function Model(props) {
   const secIntRef = useRef();
   const consoleRef = useRef();
 
-  const { position, rotation } = useControls("Position", {
-    position: {
-      value: [0, 5, 100],
-      step: 0.1,
-    },
-    rotation: {
-      value: [0, 0, 0],
-      step: 0.1,
-    },
-  });
-
   useEffect(() => {
-    console.log(activeState);
     switch (activeState) {
       case 0:
-        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 0,
           y: 5,
@@ -44,9 +31,7 @@ export function Model(props) {
           duration: 2,
           ease: "power.easeOut",
           onComplete: () => {
-            setTimeout(() => {
-              props.setIsAnimationTriggered(false);
-            }, 100);
+            setTimeout(() => {}, 100);
           },
           onStart: () => {
             gsap.to(camera.rotation, {
@@ -58,90 +43,64 @@ export function Model(props) {
         });
         break;
       case "Secondary Fence":
-        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 0,
           y: 16.5,
           z: 62.5,
           duration: 1,
           ease: "power.easeOut",
-          onComplete: () => {
-            setTimeout(() => {
-              props.setIsAnimationTriggered(false);
-            }, 500);
-          },
+
           onUpdate: () => {
             camera.lookAt(...secFencRef.current.position);
           },
         });
         break;
       case "Primary Interior Vinyl":
-        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 62,
           y: 33,
           z: 21.4,
           duration: 2,
-          onComplete: () => {
-            setTimeout(() => {
-              props.setIsAnimationTriggered(false);
-            }, 500);
-          },
+
           onUpdate: () => {
             camera.lookAt(...primIntRef.current.position);
           },
         });
         break;
       case "Primary Fence":
-        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: -40,
           y: 8,
           z: 50,
           duration: 2,
           ease: "power.easeOut",
-          onComplete: () => {
-            setTimeout(() => {
-              props.setIsAnimationTriggered(false);
-            }, 500);
-          },
+
           onUpdate: () => {
             camera.lookAt(...primFencRef.current.position);
           },
         });
         break;
       case "Secondary Interior Vinyl":
-        props.setIsAnimationTriggered(true);
-
         gsap.to(camera.position, {
           x: 27.8,
           y: 38,
           z: 13,
           duration: 2,
           ease: "power.easeOut",
-          onComplete: () => {
-            setTimeout(() => {
-              props.setIsAnimationTriggered(false);
-            }, 500);
-          },
+
           onUpdate: () => {
             camera.lookAt(...secIntRef.current.position);
           },
         });
         break;
       case "Flooring Option":
-        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 20,
           y: 40,
           z: 40,
           duration: 2,
           ease: "power.easeOut",
-          onComplete: () => {
-            setTimeout(() => {
-              props.setIsAnimationTriggered(false);
-            }, 500);
-          },
+
           onUpdate: () => {
             camera.lookAt(...floorRef.current.position);
           },
@@ -149,18 +108,13 @@ export function Model(props) {
         });
         break;
       case "Console Color":
-        props.setIsAnimationTriggered(true);
         gsap.to(camera.position, {
           x: 19,
           y: 40.5,
           z: 33,
           duration: 2,
           ease: "power.easeOut",
-          onComplete: () => {
-            setTimeout(() => {
-              props.setIsAnimationTriggered(false);
-            }, 500);
-          },
+
           onUpdate: () => {
             camera.lookAt(...consoleRef.current.position);
           },
@@ -171,10 +125,6 @@ export function Model(props) {
     }
   }, [activeState]);
 
-  useEffect(() => {
-    camera.position.set(...position);
-    camera.rotation.set(...rotation);
-  }, [rotation, position]);
   return (
     <group
       onPointerMissed={() => setActiveState(0)}
@@ -189,7 +139,6 @@ export function Model(props) {
         name='flooring'
         ref={floorRef}
         position={[0.392, -0.833, 0]}
-        onClick={() => setActiveState("Flooring Option")}
         material-color={colors["Flooring Option"]}
       />
       <mesh
@@ -198,7 +147,6 @@ export function Model(props) {
         name='console'
         ref={consoleRef}
         position={[1.395, -0.336, 0]}
-        onClick={() => setActiveState("Console Color")}
         material-color={colors["Console Color"]}
       />
       <mesh
@@ -207,7 +155,6 @@ export function Model(props) {
         position={[0.138, -0.77, 0]}
         name='Secondary Fence'
         ref={secFencRef}
-        onClick={() => setActiveState("Secondary Fence")}
         material-color={colors["Secondary Fence"]}
       />
       <mesh
@@ -218,7 +165,6 @@ export function Model(props) {
         material-color={colors["Primary Interior Vinyl"]}
         name='Primary Interior'
         ref={primIntRef}
-        onClick={() => setActiveState("Primary Interior Vinyl")}
       />
       <group
         position={[0.124, -0.494, 1.114]}
@@ -231,7 +177,6 @@ export function Model(props) {
           material-color={colors["Secondary Interior Vinyl"]}
           name='Secondary Interior'
           ref={secIntRef}
-          onClick={() => setActiveState("Secondary Interior Vinyl")}
         />
         <mesh
           geometry={nodes.Secondary_Interior_1.geometry}
@@ -323,10 +268,10 @@ export function Model(props) {
           geometry={nodes["Z-Misc_18"].geometry}
           material={materials.Metal}
           material-metalness={0.8}
+          material-roughness={0.12}
           material-color={colors["Primary Fence"]}
           name='Primary Fence'
           ref={primFencRef}
-          onClick={() => setActiveState("Primary Fence")}
         />
         <mesh
           geometry={nodes["Z-Misc_19"].geometry}
