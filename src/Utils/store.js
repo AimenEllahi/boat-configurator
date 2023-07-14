@@ -8,6 +8,7 @@ const useColorStore = create((set) => ({
     "Primary Interior Vinyl": "",
     "Secondary Interior Vinyl": "",
     "Console Color": "",
+    "Exterior Rail": "",
   },
   activeState: 0,
   setColors: (color) =>

@@ -8,6 +8,7 @@ import useColorStore from "../Utils/store";
 
 const modelParts = [
   "Primary Fence",
+  "Exterior Rail",
   "Secondary Fence",
   "Flooring Option",
   "Primary Interior Vinyl",
@@ -33,6 +34,16 @@ const colorOptions = {
     {
       name: "Charcoal",
       hex: "#424142",
+    },
+    {
+      name: "Midnight Black",
+      hex: "#000000",
+    },
+  ],
+  "Exterior Rail": [
+    {
+      name: "Metal",
+      hex: "#D5E2E6",
     },
     {
       name: "Midnight Black",

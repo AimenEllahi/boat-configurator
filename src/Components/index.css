@@ -7,11 +7,11 @@
     right: 1%;
     border-radius: 5px;
     transition: .5s all ease-out;
-
+    opacity: 0.7;
 }
 
 .color-container:hover {
-    opacity: .8;
+    opacity: 1;
 }
 
 .slider {

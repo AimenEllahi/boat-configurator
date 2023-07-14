@@ -6,23 +6,50 @@ import {
   useThree,
   useLoader,
   useFrame,
+  
 } from "@react-three/fiber";
 import {
   Environment,
   OrbitControls,
   PresentationControls,
   Sky,
+  useProgress,
+  Html,
 } from "@react-three/drei";
 import { BsFillEyeFill } from "react-icons/bs";
 import { Water } from "three/examples/jsm/objects/Water.js";
 import { useControls } from "leva";
 import { Model } from "./Components/Boat";
+import { BoatNew } from "./Components/BoatNew";
 import ColorContainer from "./Components/ColorContainer";
 // import html2canvas from "html2canvas";
 // import html2pdf from "html2pdf.js";
 // import { jsPDF } from "jspdf";
 
 import "./App.css";
+
+function Loader() {
+  const { progress } = useProgress();
+  return (
+    <Html
+      style={{
+        position: "absolute",
+        maxWidth: '100vw',
+        height: '100vh',
+        border: "1px solid red",
+      }}
+      center
+    >
+      <img
+        src="/Landau_gif.gif"
+        alt="Loading animation"
+        style={{ height: "100vh", width: "100vw",
+        }}
+      />
+    </Html>
+  );
+}
+
 
 extend({ Water });
 
@@ -132,14 +159,16 @@ export default function App() {
         <pointLight position={[-100, -100, -100]} />
         <Environment files={"/Environment/venice_sunset_1k.hdr"} />
         <Ocean />
-        <Suspense fallback={null}>
-          <Model setIsAnimationTriggered={setIsAnimationTriggered} />
+        <Suspense fallback={<Loader/>}>
+          {/* <Model setIsAnimationTriggered={setIsAnimationTriggered} /> */}
+          <BoatNew setIsAnimationTriggered={setIsAnimationTriggered} />
         </Suspense>
         <SkyBox />
 
         <OrbitControls
           enabled={!isAnimationTriggered}
           maxPolarAngle={Math.PI * 0.495}
+          enableZoom={false}
         />
       </Canvas>
       <div className='icon-container'>
