@@ -10,6 +10,7 @@ import {
 } from "@react-three/fiber";
 import {
   Environment,
+  Html,
   OrbitControls,
   PresentationControls,
   Sky,
@@ -18,15 +19,16 @@ import {
 } from "@react-three/drei";
 import { BsFillEyeFill } from "react-icons/bs";
 import { Water } from "three/examples/jsm/objects/Water.js";
-import { useControls } from "leva";
+import { useControls, button, folder } from "leva";
 import { Model } from "./Components/Boat";
 import { BoatNew } from "./Components/BoatNew";
 import ColorContainer from "./Components/ColorContainer";
-// import html2canvas from "html2canvas";
-// import html2pdf from "html2pdf.js";
-// import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import html2pdf from "html2pdf.js";
+import { jsPDF } from "jspdf";
 
 import "./App.css";
+import useColorStore from "./Utils/store";
 
 function Loader() {
   const { progress } = useProgress();
@@ -123,52 +125,52 @@ const SkyBox = () => {
 
 export default function App() {
   const [showColorContainer, setShowColorContainer] = useState(false);
-  const [isAnimationTriggered, setIsAnimationTriggered] = useState(false);
-
-  // const captureScreenshot = () => {
-  //   const canvas = document.getElementById("canvasComponent");
-  
-  //   html2canvas(canvas).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const pdf = new jsPDF("p", "mm", "a4");
-  
-  //     const imgProps = pdf.getImageProperties(imgData);
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-  
-  //     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  //     pdf.save("screenshot.pdf");
-  //   });
-  // };
+  const setActiveState = useColorStore((state) => state.setActiveState);
+  const canvasRef = useRef();
 
   const captureScreenshot = () => {
-    //to get element by id and window.printthat
-    const canvas = document.getElementById("canvasComponent");
-    window.print(canvas);
+    const canvas = document.querySelector(".print");
+
+    html2canvas(canvas).then((canvas) => {
+      var imgData = canvasRef.current
+        .toDataURL("image/png", 1.0)
+        .replace("image/png", "image/octet-stream");
+      var pdf = new jsPDF();
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, width, height);
+
+      pdf.save("download.pdf");
+    });
   };
-  
-  
+
   const handleColorClick = () => {
+    if (showColorContainer) setActiveState(0);
+
     setShowColorContainer((prevShow) => !prevShow);
   };
 
   return (
-    <div id="canvasComponent" style={{ height: "100vh", width: "100vw" }}>
-      <Canvas camera={{ position: [0, 5, 100], fov: 55, near: 1, far: 20000 }}>
+    <div id='canvasComponent' style={{ height: "100vh", width: "100vw" }}>
+      <Canvas
+        ref={canvasRef}
+        className='print'
+        camera={{ position: [0, 5, 100], fov: 55, near: 1, far: 20000 }}
+        gl={{ preserveDrawingBuffer: true }}
+      >
         <pointLight position={[100, 100, 100]} />
         <pointLight position={[-100, -100, -100]} />
         <Environment files={"/Environment/venice_sunset_1k.hdr"} />
         <Ocean />
-        <Suspense fallback={<Loader/>}>
-          {/* <Model setIsAnimationTriggered={setIsAnimationTriggered} /> */}
-          <BoatNew setIsAnimationTriggered={setIsAnimationTriggered} />
+        <Suspense fallback={null}>
+          <Model />
         </Suspense>
         <SkyBox />
 
         <OrbitControls
-          enabled={!isAnimationTriggered}
           maxPolarAngle={Math.PI * 0.495}
-          enableZoom={false}
+          rotateSpeed={0.6}
+          panSpeed={0.6}
         />
       </Canvas>
       <div className='icon-container'>
@@ -192,7 +194,9 @@ export default function App() {
           left: "50px",
         }}
       >
-        <button onClick={captureScreenshot} className='button-pdf'>Download PDF</button>
+        <button onClick={captureScreenshot} className='button-pdf'>
+          Download PDF
+        </button>
       </div>
 
       {showColorContainer && <ColorContainer show={showColorContainer} />}
